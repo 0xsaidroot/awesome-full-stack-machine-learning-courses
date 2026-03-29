@@ -1,0 +1,2 @@
+# No external dependencies required - using Python stdlib only
+# This script uses only built-in modules: json, re, pathlib, typing, dataclasses, collections

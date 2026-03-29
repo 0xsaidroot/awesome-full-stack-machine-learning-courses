@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Build
+/build
+/dist
+/.docusaurus
+
+# Generated
+/src/pages/explore.jsx.bak
+
+# Generated data (rebuilt by parse_readme.py in CI)
+data/courses.json
+data/sections.json
+data/learning_paths.json
+
+# Static images (copied from repo root images/ at build time by CI)
+static/img/*.jpg
+static/img/*.png
+
+# Scaffolding docs (not needed in repo)
+DEVELOPMENT.md
+MANIFEST.txt
+SETUP.md
+START_HERE.md
+STRUCTURE.md
+README.md
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Package lock files (keep package-lock.json for CI reproducibility)
+pnpm-lock.yaml
+yarn.lock

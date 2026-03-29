@@ -1,1 +1,3 @@
-theme: jekyll-theme-minimal
+# This file is intentionally empty.
+# The site is now built with Docusaurus (see website/) and deployed via GitHub Actions.
+# You can safely delete this file.

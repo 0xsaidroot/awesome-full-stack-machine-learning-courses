@@ -123,3 +123,8 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+
+# Website (Docusaurus)
+website/node_modules/
+website/.docusaurus/
+website/build/

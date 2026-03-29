@@ -1,0 +1,106 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Parse README into JSON data
+  parse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Parse README into JSON
+        run: python scripts/parse_readme.py
+
+      - name: Upload parsed data
+        uses: actions/upload-artifact@v4
+        with:
+          name: course-data
+          path: website/data/
+          retention-days: 1
+
+  # Build Docusaurus site
+  build:
+    needs: parse
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download parsed data
+        uses: actions/download-artifact@v4
+        with:
+          name: course-data
+          path: website/data/
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+
+      - name: Install dependencies
+        working-directory: website
+        run: npm ci
+
+      - name: Copy repo images to static dir
+        run: cp -r images/* website/static/img/
+
+      - name: Build website
+        working-directory: website
+        env:
+          NODE_OPTIONS: "--max-old-space-size=4096"
+        run: npm run build
+
+      - name: Add .nojekyll to bypass Jekyll processing
+        run: touch website/build/.nojekyll
+
+      - name: Upload build artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: website/build
+
+  # Deploy to GitHub Pages (only on push to master)
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # Validate links in README (runs on PRs)
+  link-check:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --verbose --no-progress README.md
+          fail: false

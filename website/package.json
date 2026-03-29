@@ -1,0 +1,29 @@
+{
+  "name": "awesome-ml-courses-website",
+  "version": "1.0.0",
+  "description": "Curated full stack machine learning engineering courses",
+  "scripts": {
+    "start": "docusaurus start",
+    "build": "docusaurus build",
+    "swizzle": "docusaurus swizzle",
+    "deploy": "docusaurus deploy",
+    "parse": "python ../scripts/parse_readme.py",
+    "clear": "docusaurus clear",
+    "serve": "docusaurus serve"
+  },
+  "dependencies": {
+    "@docusaurus/core": "3.7.0",
+    "@docusaurus/preset-classic": "3.7.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "clsx": "^2.1.1"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=18.0"
+  },
+  "browserslist": {
+    "production": [">0.5%", "not dead", "not op_mini all"],
+    "development": ["last 3 chrome version", "last 3 firefox version", "last 5 safari version"]
+  }
+}
